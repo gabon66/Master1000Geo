@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Entity;
 
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -31,6 +31,9 @@ class Player
 
     #[ORM\Column(type: 'integer')]
     private ?int $age = null;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private ?int $points = 0;
 
     // Getters y setters para todas las propiedades
 
@@ -107,6 +110,18 @@ class Player
     public function setAge(int $age): self
     {
         $this->age = $age;
+
+        return $this;
+    }
+
+    public function getPoints(): ?int
+    {
+        return $this->points;
+    }
+
+    public function setPoints(int $points): self
+    {
+        $this->points = $points;
 
         return $this;
     }

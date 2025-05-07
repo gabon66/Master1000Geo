@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Player;
+use App\Domain\Entity\Player;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -21,6 +21,7 @@ class AppFixtures extends Fixture
             $player->setVelocity(rand(1, 100));
             $player->setReaction(rand(1, 100));
             $player->setAge(rand(18, 40));
+            $player->setPoints(0);
             $manager->persist($player);
         }
 
