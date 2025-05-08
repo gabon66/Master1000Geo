@@ -1,8 +1,9 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Player\Infrastructure\DataFixtures;
 
-use App\Domain\Entity\Player;
+
+use App\Player\Domain\Entity\Player;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;

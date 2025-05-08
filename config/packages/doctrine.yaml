@@ -16,14 +16,21 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         identity_generation_preferences:
             Doctrine\DBAL\Platforms\PostgreSQLPlatform: identity
-        auto_mapping: true
+        auto_mapping: false
         mappings:
-            App:
+            Tournament:
                 type: attribute
                 is_bundle: false
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/Tournament/Domain/Entity'
+                prefix: 'App\Tournament\Domain\Entity'
+                alias: Tournament
+
+            Player:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Player/Domain/Entity'
+                prefix: 'App\Player\Domain\Entity'
+                alias: Player
         controller_resolver:
             auto_mapping: false
 

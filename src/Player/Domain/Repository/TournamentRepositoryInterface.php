@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Repository;
+namespace App\Player\Domain\Repository;
 
-use App\Domain\Entity\Tournament;
+use App\Tournament\Domain\Entity\Tournament;
 
 interface TournamentRepositoryInterface
 {

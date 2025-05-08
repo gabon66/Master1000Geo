@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Domain\Entity;
+namespace App\Tournament\Domain\Entity;
 
+use App\Player\Domain\Entity\Player;
 use App\Repository\MatchGameRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

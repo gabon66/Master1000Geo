@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Entity;
+namespace App\Player\Domain\Entity;
 
-use App\Repository\PlayerRepository;
+use App\Player\Infrastructure\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PlayerRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'players')]
 class Player
 {

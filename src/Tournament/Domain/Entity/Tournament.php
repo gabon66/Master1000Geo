@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Domain\Entity;
+namespace App\Tournament\Domain\Entity;
 
+use App\Player\Domain\Entity\Player;
 use App\Repository\TournamentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
