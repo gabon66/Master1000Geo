@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Player\Application\Query\ListPlayersQuery;
 use App\Player\Application\Query\ListPlayersQueryHandler;
+use App\Player\Domain\ValueObject\Gender;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,10 +29,13 @@ final class PlayersController extends AbstractController
         $genderParam = $request->query->get('gender');
         $gender = null;
 
-        if ($genderParam === 'true') {
-            $gender = true;
-        } elseif ($genderParam === 'false') {
-            $gender = false;
+        if ($genderParam !== null) {
+            try {
+                $gender = new Gender($genderParam);
+            } catch (\InvalidArgumentException $exception) {
+
+                return new JsonResponse(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+            }
         }
 
         $query = new ListPlayersQuery($gender);

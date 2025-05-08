@@ -2,16 +2,18 @@
 
 namespace App\Player\Application\Query;
 
+use App\Player\Domain\ValueObject\Gender;
+
 class ListPlayersQuery
 {
-    private ?bool $gender;
+    private ?Gender $gender;
 
-    public function __construct(?bool $gender)
+    public function __construct(?Gender $gender)
     {
         $this->gender = $gender;
     }
 
-    public function getGender(): ?bool
+    public function getGender(): ?Gender
     {
         return $this->gender;
     }

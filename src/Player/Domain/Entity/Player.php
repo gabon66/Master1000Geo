@@ -2,8 +2,9 @@
 
 namespace App\Player\Domain\Entity;
 
-use App\Player\Infrastructure\Repository\PlayerRepository;
+use App\Player\Domain\ValueObject\Gender;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'players')]
@@ -12,27 +13,35 @@ class Player
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['player_list'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['player_list'])]
     private ?string $name = null;
 
-    #[ORM\Column(type: 'boolean')]
-    private ?bool $gender = null;
+    #[ORM\Column(type: 'gender', length: 10, nullable: true)] // Usamos nuestro tipo 'gender'
+    #[Groups(['player_list'])]
+    private ?Gender $gender = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['player_list'])]
     private ?int $strength = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['player_list'])]
     private ?int $velocity = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['player_list'])]
     private ?int $reaction = null;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['player_list'])]
     private ?int $age = null;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    #[Groups(['player_list'])]
     private ?int $points = 0;
 
     // Getters y setters para todas las propiedades
@@ -54,16 +63,14 @@ class Player
         return $this;
     }
 
-    public function isGender(): ?bool
+    public function getGender(): ?Gender
     {
         return $this->gender;
     }
 
-    public function setGender(bool $gender): self
+    public function setGender(?Gender $gender): void
     {
         $this->gender = $gender;
-
-        return $this;
     }
 
     public function getStrength(): ?int
