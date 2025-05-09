@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Psr\Log\LoggerInterface;
+use OpenApi\Attributes as OA;
 
 
 #[Route('/api/players', name: 'api_players')]
@@ -34,6 +35,51 @@ final class PlayersController extends AbstractController
         $this->validator = $validator;
     }
 
+
+    #[OA\Get(
+        path: '/api/players',
+        summary: 'Lists players, optionally filtered by gender.',
+        parameters: [
+            new OA\Parameter(
+                name: 'gender',
+                in: 'query',
+                description: 'Filter players by gender (male or female).',
+                schema: new OA\Schema(type: 'string', enum: ['male', 'female'])
+            ),
+            new OA\Parameter(
+                name: 'orderBy',
+                in: 'query',
+                description: 'Field to order players by.',
+                schema: new OA\Schema(type: 'string', enum: ['name', 'points', 'age', 'strength', 'velocity', 'reaction'])
+            ),
+            new OA\Parameter(
+                name: 'orderDirection',
+                in: 'query',
+                description: 'Order direction (ASC or DESC). Defaults to ASC.',
+                schema: new OA\Schema(type: 'string', enum: ['ASC', 'DESC'])
+            ),
+            new OA\Parameter(
+                name: 'limit',
+                in: 'query',
+                description: 'Maximum number of players to return.',
+                schema: new OA\Schema(type: 'integer', format: 'int32')
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'A list of players.',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(ref: '#/components/schemas/Player')
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Invalid gender provided.'
+            )
+        ]
+    )]
     #[Route('', name: 'list', methods: ['GET'])]
     public function list(Request $request , ListPlayersQueryHandler $handler): JsonResponse
     {

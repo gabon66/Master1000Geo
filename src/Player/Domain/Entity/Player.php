@@ -9,7 +9,21 @@ use App\Player\Domain\ValueObject\Skill\Strength;
 use App\Player\Domain\ValueObject\Skill\Velocity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    schema: 'Player',
+    properties: [
+        new OA\Property(property: 'id', type: 'integer', format: 'int64', readOnly: true),
+        new OA\Property(property: 'name', type: 'string'),
+        new OA\Property(property: 'gender', type: 'string', enum: ['male', 'female']),
+        new OA\Property(property: 'age', type: 'integer', format: 'int32'),
+        new OA\Property(property: 'strength', type: 'integer', format: 'int32', nullable: true),
+        new OA\Property(property: 'velocity', type: 'integer', format: 'int32', nullable: true),
+        new OA\Property(property: 'reaction', type: 'integer', format: 'int32', nullable: true),
+        new OA\Property(property: 'points', type: 'integer', format: 'int32'), // Asumiendo que tienes 'points'
+    ]
+)]
 #[ORM\Entity]
 #[ORM\Table(name: 'players')]
 class Player
