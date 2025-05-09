@@ -99,6 +99,52 @@ final class PlayersController extends AbstractController
         return new JsonResponse($data, Response::HTTP_OK);
     }
 
+    #[OA\Post(
+        path: '/api/players',
+        summary: 'Creates a new player.',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'name', type: 'string', example: 'Lionel Messi'),
+                    new OA\Property(property: 'gender', type: 'string', enum: ['male', 'female'], example: 'male'),
+                    new OA\Property(property: 'age', type: 'integer', format: 'int32', example: 36),
+                    new OA\Property(property: 'strength', type: 'integer', format: 'int32', nullable: true, example: 85),
+                    new OA\Property(property: 'velocity', type: 'integer', format: 'int32', nullable: true, example: 92),
+                    new OA\Property(property: 'reaction', type: 'integer', format: 'int32', nullable: true, example: 88),
+                ],
+                required: ['name', 'gender', 'age']
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'The newly created player.',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'name', type: 'string', example: 'Lionel Messi'),
+                        new OA\Property(property: 'gender', type: 'string', example: 'male'),
+                        new OA\Property(property: 'age', type: 'integer', example: 36),
+                        new OA\Property(property: 'strength', type: 'integer', nullable: true, example: 85),
+                        new OA\Property(property: 'velocity', type: 'integer', nullable: true, example: 92),
+                        new OA\Property(property: 'reaction', type: 'integer', nullable: true, example: 88),
+                        new OA\Property(property: 'id', type: 'integer', readOnly: true, example: 123), // Asumiendo que tu entidad tiene un ID
+                        // ... otras propiedades de la entidad Player que quieras mostrar
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Invalid request data.'
+            ),
+            new OA\Response(
+                response: 500,
+                description: 'Failed to create player.'
+            )
+        ]
+    )]
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(Request $request, LoggerInterface $logger,CreatePlayerCommandHandler $createPlayerCommandHandler): JsonResponse
     {
