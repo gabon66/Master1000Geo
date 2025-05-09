@@ -2,7 +2,11 @@
 
 namespace App\Player\Domain\Entity;
 
+use App\Player\Domain\ValueObject\Age;
 use App\Player\Domain\ValueObject\Gender;
+use App\Player\Domain\ValueObject\Skill\Reaction;
+use App\Player\Domain\ValueObject\Skill\Strength;
+use App\Player\Domain\ValueObject\Skill\Velocity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -24,21 +28,21 @@ class Player
     #[Groups(['player_list'])]
     private ?Gender $gender = null;
 
-    #[ORM\Column(type: 'integer')]
-    #[Groups(['player_list'])]
-    private ?int $strength = null;
+    #[ORM\Column(type: 'strength',nullable: true)]
+    #[Groups(['player_list', 'player_details', 'player_create', 'player_update'])]
+    private ?Strength $strength = null;
 
-    #[ORM\Column(type: 'integer')]
-    #[Groups(['player_list'])]
-    private ?int $velocity = null;
+    #[ORM\Column(type: 'velocity',nullable: true)]
+    #[Groups(['player_list', 'player_details', 'player_create', 'player_update'])]
+    private ?Velocity $velocity = null;
 
-    #[ORM\Column(type: 'integer')]
-    #[Groups(['player_list'])]
-    private ?int $reaction = null;
+    #[ORM\Column(type: 'reaction',nullable: true)]
+    #[Groups(['player_list', 'player_details', 'player_create', 'player_update'])]
+    private ?Reaction $reaction = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: 'age')]
     #[Groups(['player_list'])]
-    private ?int $age = null;
+    private ?Age $age = null;
 
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
     #[Groups(['player_list'])]
@@ -73,48 +77,42 @@ class Player
         $this->gender = $gender;
     }
 
-    public function getStrength(): ?int
+    public function getStrength(): ?Strength
     {
         return $this->strength;
     }
 
-    public function setStrength(int $strength): self
+    public function setStrength(?Strength $strength): void
     {
         $this->strength = $strength;
-
-        return $this;
     }
 
-    public function getVelocity(): ?int
+    public function getVelocity(): ?Velocity
     {
         return $this->velocity;
     }
 
-    public function setVelocity(int $velocity): self
+    public function setVelocity(?Velocity $velocity): void
     {
         $this->velocity = $velocity;
-
-        return $this;
     }
 
-    public function getReaction(): ?int
+    public function getReaction(): ?Reaction
     {
         return $this->reaction;
     }
 
-    public function setReaction(int $reaction): self
+    public function setReaction(?Reaction $reaction): void
     {
         $this->reaction = $reaction;
-
-        return $this;
     }
 
-    public function getAge(): ?int
+    public function getAge(): ?Age
     {
         return $this->age;
     }
 
-    public function setAge(int $age): self
+    public function setAge(?Age $age): self
     {
         $this->age = $age;
 

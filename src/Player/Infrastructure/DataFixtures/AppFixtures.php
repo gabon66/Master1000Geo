@@ -3,6 +3,9 @@ namespace App\Player\Infrastructure\DataFixtures;
 
 use App\Player\Domain\Entity\Player;
 use App\Player\Domain\ValueObject\Gender;
+use App\Player\Domain\ValueObject\Skill\Reaction;
+use App\Player\Domain\ValueObject\Skill\Strength;
+use App\Player\Domain\ValueObject\Skill\Velocity;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -22,9 +25,9 @@ class AppFixtures extends Fixture
             } catch (\InvalidArgumentException $e) {
                 error_log("Error creando género masculino en fixture: " . $e->getMessage());
             }
-            $player->setStrength(rand(1, 100));
-            $player->setVelocity(rand(1, 100));
-            $player->setReaction(rand(1, 100));
+            $player->setStrength(new Strength(rand(0, 100)));
+            $player->setVelocity(new Velocity(rand(0, 100)));
+            $player->setReaction(new Reaction(rand(0, 100)));
             $player->setAge(rand(18, 40));
             $player->setPoints(0);
             $manager->persist($player);
@@ -39,9 +42,9 @@ class AppFixtures extends Fixture
             } catch (\InvalidArgumentException $e) {
                 error_log("Error creando género femenino en fixture: " . $e->getMessage());
             }
-            $player->setStrength(rand(1, 100));
-            $player->setVelocity(rand(1, 100));
-            $player->setReaction(rand(1, 100));
+            $player->setStrength(new Strength(rand(0, 100)));
+            $player->setVelocity(new Velocity(rand(0, 100)));
+            $player->setReaction(new Reaction(rand(0, 100)));
             $player->setAge(rand(18, 40));
             $player->setPoints(0);
             $manager->persist($player);
