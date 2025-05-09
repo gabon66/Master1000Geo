@@ -7,10 +7,6 @@ use App\Player\Domain\ValueObject\Skill\Strength;
 
 class StrengthTypeConverter extends BaseSkillTypeConverter
 {
-    public const NAME = 'strength';
-
-    public function __construct()
-    {
-        parent::__construct(Strength::class, self::NAME);
-    }
+    public static string $supportedClass = Strength::class;
+    public static string $typeName = 'strength';
 }

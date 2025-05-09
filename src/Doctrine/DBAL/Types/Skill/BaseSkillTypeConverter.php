@@ -9,28 +9,22 @@ use InvalidArgumentException;
 
 abstract class BaseSkillTypeConverter extends SmallIntType
 {
-    private string $supportedClass;
-    private string $typeName;
-
-    public function __construct(string $supportedClass, string $typeName)
-    {
-        $this->supportedClass = $supportedClass;
-        $this->typeName = $typeName;
-    }
+    public static string $supportedClass;
+    public static string $typeName;
 
     public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?BaseSkill
     {
-        return $value === null ? null : new $this->supportedClass($value);
+        return $value === null ? null : new static::$supportedClass($value);
     }
 
     public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
-        return $value instanceof $this->supportedClass ? $value->getValue() : null;
+        return $value instanceof static::$supportedClass ? $value->getValue() : null;
     }
 
     public function getName(): string
     {
-        return $this->typeName;
+        return static::$typeName;
     }
 
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool

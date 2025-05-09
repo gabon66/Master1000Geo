@@ -4,13 +4,12 @@ namespace App\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\Skill\BaseSkillTypeConverter;
 use App\Player\Domain\ValueObject\Skill\Reaction;
+use App\Player\Domain\ValueObject\Skill\Strength;
 
 class ReactionTypeConverter extends BaseSkillTypeConverter
 {
-    public const NAME = 'reaction';
+    public static string $supportedClass = Reaction::class;
+    public static string $typeName = 'reaction';
 
-    public function __construct()
-    {
-        parent::__construct(Reaction::class, self::NAME);
-    }
+
 }
