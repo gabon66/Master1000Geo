@@ -69,10 +69,6 @@ final class PlayersController extends AbstractController
             new OA\Response(
                 response: 200,
                 description: 'A list of players.',
-                content: new OA\JsonContent(
-                    type: 'array',
-                    items: new OA\Items(ref: '#/components/schemas/Player')
-                )
             ),
             new OA\Response(
                 response: 400,
