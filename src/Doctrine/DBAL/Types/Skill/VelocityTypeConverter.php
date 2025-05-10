@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Doctrine\DBAL\Types;
+namespace App\Doctrine\DBAL\Types\Skill;
 
 use App\Doctrine\DBAL\Types\Skill\BaseSkillTypeConverter;
 use App\Player\Domain\ValueObject\Skill\Reaction;

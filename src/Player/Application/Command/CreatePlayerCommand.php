@@ -18,6 +18,7 @@ class CreatePlayerCommand
     public ?int $velocity;
 
     public ?int $reaction;
+    public ?int $ability;
 
     public ?int $age;
 
@@ -27,6 +28,7 @@ class CreatePlayerCommand
         ?int    $strength,
         ?int    $velocity,
         ?int    $reaction,
+        ?int    $ability,
         ?int    $age
     )
     {
@@ -36,5 +38,6 @@ class CreatePlayerCommand
         $this->strength = $strength;
         $this->velocity = $velocity;
         $this->reaction = $reaction;
+        $this->ability = $ability;
     }
 }

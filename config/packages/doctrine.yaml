@@ -3,9 +3,10 @@ doctrine:
         url: '%env(resolve:DATABASE_URL)%'
         types:
             gender: App\Doctrine\DBAL\Types\GenderTypeConverter
-            strength: App\Doctrine\DBAL\Types\StrengthTypeConverter
-            velocity: App\Doctrine\DBAL\Types\VelocityTypeConverter
-            reaction: App\Doctrine\DBAL\Types\ReactionTypeConverter
+            strength: App\Doctrine\DBAL\Types\Skill\StrengthTypeConverter
+            velocity: App\Doctrine\DBAL\Types\Skill\VelocityTypeConverter
+            reaction: App\Doctrine\DBAL\Types\Skill\ReactionTypeConverter
+            ability: App\Doctrine\DBAL\Types\Skill\AbilityTypeConverter
             age: App\Doctrine\DBAL\Types\AgeTypeConverter
 
         profiling_collect_backtrace: '%kernel.debug%'

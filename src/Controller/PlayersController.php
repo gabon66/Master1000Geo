@@ -5,6 +5,10 @@ namespace App\Controller;
 use ApiPlatform\Validator\ValidatorInterface;
 use App\Player\Application\Command\CreatePlayerCommand;
 use App\Player\Application\Command\CreatePlayerCommandHandler;
+use App\Player\Application\Command\DeletePlayerCommand;
+use App\Player\Application\Command\DeletePlayerCommandHandler;
+use App\Player\Application\Command\UpdatePlayerSkillsCommand;
+use App\Player\Application\Command\UpdatePlayerSkillsCommandHandler;
 use App\Player\Application\Query\ListPlayersQuery;
 use App\Player\Application\Query\ListPlayersQueryHandler;
 use App\Player\Domain\Enum\LimitsList;
@@ -110,6 +114,7 @@ final class PlayersController extends AbstractController
                     new OA\Property(property: 'name', type: 'string', example: 'Lionel Messi'),
                     new OA\Property(property: 'gender', type: 'string', enum: ['male', 'female'], example: 'male'),
                     new OA\Property(property: 'age', type: 'integer', format: 'int32', example: 36),
+                    new OA\Property(property: 'ability', type: 'integer', format: 'int32', nullable: true, example: 85),
                     new OA\Property(property: 'strength', type: 'integer', format: 'int32', nullable: true, example: 85),
                     new OA\Property(property: 'velocity', type: 'integer', format: 'int32', nullable: true, example: 92),
                     new OA\Property(property: 'reaction', type: 'integer', format: 'int32', nullable: true, example: 88),
@@ -127,6 +132,7 @@ final class PlayersController extends AbstractController
                         new OA\Property(property: 'name', type: 'string', example: 'Lionel Messi'),
                         new OA\Property(property: 'gender', type: 'string', example: 'male'),
                         new OA\Property(property: 'age', type: 'integer', example: 36),
+                        new OA\Property(property: 'ability', type: 'integer', nullable: true, example: 92),
                         new OA\Property(property: 'strength', type: 'integer', nullable: true, example: 85),
                         new OA\Property(property: 'velocity', type: 'integer', nullable: true, example: 92),
                         new OA\Property(property: 'reaction', type: 'integer', nullable: true, example: 88),
@@ -179,6 +185,129 @@ final class PlayersController extends AbstractController
         $topPlayers = $handler($query);
         $data = $serializer->normalize($topPlayers, null, ['groups' => 'player_list']);
         return new JsonResponse($data, Response::HTTP_OK);
+    }
+
+
+    #[OA\Delete(
+        path: '/api/players/{id}',
+        summary: 'Deletes a player by ID.',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                description: 'The ID of the player to delete.',
+                required: true,
+                schema: new OA\Schema(type: 'integer', format: 'int64')
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 204,
+                description: 'Player deleted successfully.'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Player not found.'
+            ),
+            new OA\Response(
+                response: 500,
+                description: 'Failed to delete player.'
+            )
+        ]
+    )]
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    public function delete(int $id, DeletePlayerCommandHandler $handler): JsonResponse
+    {
+        try {
+            $command = new DeletePlayerCommand($id);
+            $handler($command);
+            return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Failed to delete player.', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[OA\Put(
+        path: '/api/players/{id}/skills',
+        summary: 'Updates the skills of a player by ID.',
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                in: 'path',
+                description: 'The ID of the player to update.',
+                required: true,
+                schema: new OA\Schema(type: 'integer', format: 'int64')
+            )
+        ],
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'strength', type: 'integer', format: 'int32', nullable: true, example: 88),
+                    new OA\Property(property: 'velocity', type: 'integer', format: 'int32', nullable: true, example: 95),
+                    new OA\Property(property: 'ability', type: 'integer', format: 'int32', nullable: true, example: 95),
+                    new OA\Property(property: 'reaction', type: 'integer', format: 'int32', nullable: true, example: 90),
+                ],
+                required: [] // No skills are strictly required to be updated
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Player skills updated successfully.',
+                content: new OA\JsonContent(
+                    type: 'object',
+                    properties: [
+                        new OA\Property(property: 'id', type: 'integer', readOnly: true, example: 123),
+                        new OA\Property(property: 'name', type: 'string', example: 'Lionel Messi'),
+                        new OA\Property(property: 'gender', type: 'string', example: 'male'),
+                        new OA\Property(property: 'age', type: 'integer', example: 36),
+                        new OA\Property(property: 'ability', type: 'integer', nullable: true, example: 95),
+                        new OA\Property(property: 'strength', type: 'integer', nullable: true, example: 88),
+                        new OA\Property(property: 'velocity', type: 'integer', nullable: true, example: 95),
+                        new OA\Property(property: 'reaction', type: 'integer', nullable: true, example: 90),
+                    ]
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: 'Invalid request data.'
+            ),
+            new OA\Response(
+                response: 404,
+                description: 'Player not found.'
+            ),
+            new OA\Response(
+                response: 500,
+                description: 'Failed to update player skills.'
+            )
+        ]
+    )]
+    #[Route('/{id}/skills', name: 'update_skills', methods: ['PUT'], requirements: ['id' => '\d+'])]
+    public function updateSkills(int $id, Request $request, LoggerInterface $logger,
+                                 UpdatePlayerSkillsCommandHandler $updatePlayerSkillsCommandHandler): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        try {
+            $command = new UpdatePlayerSkillsCommand($id,
+                $data['ability'] ?? null,
+                $data['strength'] ?? null,
+                $data['velocity'] ?? null,
+                $data['reaction'] ?? null
+            );
+            $player = $updatePlayerSkillsCommandHandler($command);
+            $responseData = $this->serializer->normalize($player, null, ['groups' => 'player_list']);
+            return new JsonResponse($responseData, Response::HTTP_OK);
+        } catch (\InvalidArgumentException $e) {
+            $logger->error('InvalidArgumentException from handler: ' . $e->getMessage());
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            $logger->error('Unexpected error updating player skills: ' . $e->getMessage());
+            return new JsonResponse(['error' => 'Failed to update player skills.', 'message' => $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 

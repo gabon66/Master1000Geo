@@ -4,6 +4,7 @@ namespace App\Player\Domain\Entity;
 
 use App\Player\Domain\ValueObject\Age;
 use App\Player\Domain\ValueObject\Gender;
+use App\Player\Domain\ValueObject\Skill\Ability;
 use App\Player\Domain\ValueObject\Skill\Reaction;
 use App\Player\Domain\ValueObject\Skill\Strength;
 use App\Player\Domain\ValueObject\Skill\Velocity;
@@ -54,6 +55,10 @@ class Player
     #[Groups(['player_list', 'player_details', 'player_create', 'player_update'])]
     private ?Reaction $reaction = null;
 
+    #[ORM\Column(type: 'ability',nullable: true)]
+    #[Groups(['player_list', 'player_details', 'player_create', 'player_update'])]
+    private ?Ability $ability = null;
+
     #[ORM\Column(type: 'age')]
     #[Groups(['player_list'])]
     private ?Age $age = null;
@@ -84,6 +89,16 @@ class Player
     public function getGender(): ?Gender
     {
         return $this->gender;
+    }
+
+    public function getAbility(): ?Ability
+    {
+        return $this->ability;
+    }
+
+    public function setAbility(?Ability $ability): void
+    {
+        $this->ability = $ability;
     }
 
     public function setGender(?Gender $gender): void

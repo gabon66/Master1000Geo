@@ -6,6 +6,7 @@ use App\Player\Application\Command\CreatePlayerCommand;
 use App\Player\Domain\Entity\Player;
 use App\Player\Domain\ValueObject\Age;
 use App\Player\Domain\ValueObject\Gender;
+use App\Player\Domain\ValueObject\Skill\Ability;
 use App\Player\Domain\ValueObject\Skill\Reaction;
 use App\Player\Domain\ValueObject\Skill\Strength;
 use App\Player\Domain\ValueObject\Skill\Velocity;
@@ -18,12 +19,14 @@ abstract class BasePlayerCreator implements PlayerCreatorInterface
         try {
             $gender = new Gender($command->gender);
             $age = new Age($command->age);
+            $ability = new Ability($command->ability);
         } catch (\InvalidArgumentException $e) {
-            throw new \InvalidArgumentException('Invalid player gender: ' . $e->getMessage());
+            throw new \InvalidArgumentException('Invalid player values: ' . $e->getMessage());
         }
 
         $player = new Player();
         $player->setName($command->name);
+        $player->setAbility($ability);
         $player->setAge($age);
         $player->setGender($gender);
         return $player;

@@ -4,6 +4,7 @@ namespace App\Player\Infrastructure\DataFixtures;
 use App\Player\Domain\Entity\Player;
 use App\Player\Domain\ValueObject\Age;
 use App\Player\Domain\ValueObject\Gender;
+use App\Player\Domain\ValueObject\Skill\Ability;
 use App\Player\Domain\ValueObject\Skill\Reaction;
 use App\Player\Domain\ValueObject\Skill\Strength;
 use App\Player\Domain\ValueObject\Skill\Velocity;
@@ -27,6 +28,7 @@ class AppFixtures extends Fixture
                 error_log("Error creando género masculino en fixture: " . $e->getMessage());
             }
             $player->setStrength(new Strength(rand(0, 100)));
+            $player->setAbility(new Ability(rand(0, 100)));
             $player->setVelocity(new Velocity(rand(0, 100)));
             $player->setReaction(new Reaction(rand(0, 100)));
             $player->setAge(new Age(rand(18, 40)));
@@ -44,6 +46,7 @@ class AppFixtures extends Fixture
                 error_log("Error creando género femenino en fixture: " . $e->getMessage());
             }
             $player->setStrength(new Strength(rand(0, 100)));
+            $player->setAbility(new Ability(rand(0, 100)));
             $player->setVelocity(new Velocity(rand(0, 100)));
             $player->setReaction(new Reaction(rand(0, 100)));
             $player->setAge(new Age(rand(18, 40)));
