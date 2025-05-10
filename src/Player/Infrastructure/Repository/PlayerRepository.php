@@ -52,10 +52,4 @@ class PlayerRepository implements PlayerRepositoryInterface
     {
         return $this->objectRepository->findOneBy($criteria);
     }
-
-    // Ejemplo de implementación del método comentado en la interfaz
-    // public function findPlayersOrderedByPoints(string $order = 'DESC'): array
-    // {
-    //     return $this->objectRepository->findBy([], ['points' => $order]);
-    // }
 }

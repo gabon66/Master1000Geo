@@ -3,13 +3,13 @@
 namespace App\Tournament\Domain\Entity;
 
 use App\Player\Domain\Entity\Player;
-use App\Repository\TournamentRepository;
+use App\Player\Domain\ValueObject\Gender;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TournamentRepository::class)]
+#[ORM\Entity]
 #[ORM\Table(name: 'tournaments')]
 class Tournament
 {
@@ -24,11 +24,8 @@ class Tournament
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $startDate = null;
 
-    #[ORM\Column(type: 'integer')]
-    private ?int $endDate = null;
-
-    #[ORM\Column(type: 'boolean')]
-    private ?bool $genderTournament = null;
+    #[ORM\Column(type: 'gender', length: 10, nullable: true)] // Usamos nuestro tipo 'gender'
+    private ?Gender $genderTournament = null;
 
     #[ORM\ManyToMany(targetEntity: Player::class, inversedBy: 'tournaments')]
     #[ORM\JoinTable(name: 'tournament_players')]
@@ -36,16 +33,16 @@ class Tournament
     #[ORM\InverseJoinColumn(name: 'player_id', referencedColumnName: 'id')]
     private Collection $players;
 
-    #[ORM\OneToMany(mappedBy: 'tournament', targetEntity: MatchGame::class)]
-    private Collection $matches;
+    #[ORM\ManyToOne(targetEntity: Player::class)]
+    #[ORM\JoinColumn(name: 'winner_id', referencedColumnName: 'id', nullable: true)]
+    private ?Player $winner = null; // Nuevo campo para el ganador
+
 
     public function __construct()
     {
         $this->players = new ArrayCollection();
         $this->matches = new ArrayCollection();
     }
-
-    // Getters y setters para todas las propiedades, incluyendo para la colección de jugadores y partidos
 
     public function getId(): ?int
     {
@@ -56,6 +53,17 @@ class Tournament
     {
         return $this->name;
     }
+
+    public function getWinner(): ?Player
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?Player $winner): void
+    {
+        $this->winner = $winner;
+    }
+
 
     public function setName(string $name): self
     {
@@ -76,28 +84,15 @@ class Tournament
         return $this;
     }
 
-    public function getEndDate(): ?int
-    {
-        return $this->endDate;
-    }
 
-    public function setEndDate(int $endDate): self
-    {
-        $this->endDate = $endDate;
-
-        return $this;
-    }
-
-    public function isGenderTournament(): ?bool
+    public function getGenderTournament(): ?Gender
     {
         return $this->genderTournament;
     }
 
-    public function setGenderTournament(bool $genderTournament): self
+    public function setGenderTournament(?Gender $genderTournament): void
     {
         $this->genderTournament = $genderTournament;
-
-        return $this;
     }
 
     /**
