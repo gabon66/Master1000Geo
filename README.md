@@ -101,15 +101,57 @@ docker compose exec app php bin/console doctrine:fixtures:load
 ![Gaudio en accion](public/endpoints.png)
 
 
-8. Uso de Swagger UI
+## 8. Uso de Swagger UI
    Para explorar y probar los endpoints de la API de forma interactiva, puedes utilizar Swagger UI. Está disponible en la ruta /api/doc de la aplicación: http://localhost:8080/api/doc.
 
-9. Pruebas
+## 9. Pruebas
    Si has implementado pruebas unitarias o funcionales, puedes ejecutarlas dentro del contenedor PHP:
 
 ```bash
 docker compose exec app ./vendor/bin/phpunit
 ```
+
+
+```
+tests/
+├── Player
+│   ├── Application
+│   │   ├── Command
+│   │   │   ├── CreatePlayerCommandHandlerTest.php
+│   │   │   ├── DeletePlayerCommandHandlerTest.php
+│   │   │   └── UpdatePlayerSkillsCommandHandlerTest.php
+│   │   ├── Query
+│   │   │   └── ListPlayersQueryHandlerTest.php
+│   │   └── Service
+│   │       ├── FemalePlayerCreatorTest.php
+│   │       └── MalePlayerCreatorTest.php
+│   └── Domain
+│       └── ValueObject
+│           ├── AbilityTest.php
+│           ├── GenderTest.php
+│           ├── ReactionTest.php
+│           ├── SkillValueObjectTest.php
+│           ├── StrengthTest.php
+│           └── VelocityTest.php
+└── Tounament
+    └── Application
+        ├── Command
+        │   └── SimulateTournamentCommandHandlerTest.php
+        ├── Query
+        │   └── GetTournamentsQueryHandlerTest.php
+        └── Service
+            ├── CheckDopingPlayersServiceTest.php
+            ├── MatchWinnerServiceTest.php
+            └── TournamentServiceTest.php
+```
+
+Este conjunto de pruebas unitarias busca asegurar la robustez y el correcto funcionamiento de la lógica de negocio en las diferentes capas de la aplicación. Se han implementado pruebas para:
+
+* **Command Handlers:** Verificando la correcta ejecución de los comandos, incluyendo la creación, eliminación y actualización de jugadores, así como la simulación de torneos.
+* **Query Handlers:** Asegurando la correcta recuperación de información, tanto de listas de jugadores como de detalles de los torneos.
+* **Services:** Probando la lógica específica de los servicios, como la creación de jugadores basada en género, la verificación de doping, la determinación del ganador de los partidos y la gestión general de los torneos.
+* **Value Objects:** Validando la correcta instanciación y las reglas de negocio de los objetos de valor del dominio, como las habilidades de los jugadores (fuerza, velocidad, reacción, habilidad), la edad y el género.
+
 
 ## 10. Lógica Adicional
 
