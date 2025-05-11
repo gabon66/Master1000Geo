@@ -61,7 +61,7 @@ docker compose exec app php bin/console doctrine:migrations:migrate -n
 ```
 Este comando aplicará cualquier migración pendiente a la base de datos, creando las tablas necesarias.
 
-6. Carga de Datos de Prueba (Jugadores)
+## 6. Carga de Datos de Prueba (Jugadores)
    Para cargar datos de prueba (20 jugadores) en la base de datos, puedes ejecutar el siguiente comando:
 
 ```bash
@@ -119,3 +119,106 @@ docker compose exec app ./vendor/bin/phpunit
       La habilidad general (`ability`) también influye en la probabilidad de victoria.
 * **Doping:** Se ha implementado una lógica para simular pruebas de doping. Los jugadores tienen una probabilidad de ser seleccionados para una prueba, y si el resultado es positivo, son descalificados del torneo y sus puntos acumulados quedan en 0.
 * **Puntos de Jugador:** Los jugadores ganan puntos en función de su desempeño en los torneos. Estos puntos se pueden utilizar para ordenar a los jugadores.
+
+
+## Arquitectura del Proyecto
+
+Este proyecto sigue los principios de Diseño Dirigido por el Dominio (DDD) y está organizado en tres capas principales:
+
+* **Dominio:** Contiene la lógica de negocio central, las entidades, los Value Objects y las reglas del dominio. En este proyecto, se encuentra principalmente en el directorio `src/[NombreDelModulo]/Domain/`.
+
+* **Aplicación:** Contiene los casos de uso de la aplicación, los Command Handlers, los Query Handlers, los Presenters y los servicios de aplicación que orquestan la lógica del dominio para cumplir con los requisitos del usuario. Se encuentra principalmente en el directorio `src/[NombreDelModulo]/Application/`.
+
+* **Infraestructura:** Contiene los detalles de implementación concretos, como la persistencia de la base de datos (a través de Doctrine en `src/[NombreDelModulo]/Infrastructure/Repository`), la configuración de las Fixtures (`src/[NombreDelModulo]/Infrastructure/DataFixtures`), y cualquier otra integración con sistemas externos.
+
+### Estructura de los Módulos Principales
+
+A continuación, se muestra la estructura de los directorios para los módulos `Player` y `Tournament`, ilustrando cómo se organiza el código a través de las capas de Dominio y Aplicación:
+
+#### Módulo Tournament:
+
+```
+src/
+└── Tournament/
+    ├── Application/
+    │   ├── Command/
+    │   │   ├── SimulateTournamentCommand.php
+    │   │   └── SimulateTournamentCommandHandler.php
+    │   ├── Presenter/
+    │   │   └── TournamentPresenter.php
+    │   ├── Query/
+    │   │   ├── GetTournamentsQuery.php
+    │   │   └── GetTournamentsQueryHandler.php
+    │   └── Service/
+    │       ├── CheckDopingPlayersService.php
+    │       ├── MatchService.php
+    │       ├── MatchWinner/
+    │       │   ├── BaseMatchWinnerStrategy.php
+    │       │   ├── FemaleMatchWinnerStrategy.php
+    │       │   ├── MaleMatchWinnerStrategy.php
+    │       │   └── MatchWinnerService.php
+    │       ├── TournamentService.php
+    │       └── WinnerPointsService.php
+    ├── Domain/
+    │   ├── Entity/
+    │   │   ├── MatchGame.php
+    │   │   └── Tournament.php
+    │   ├── Enum/
+    │   │   └── TournamentRules.php
+    │   ├── Repository/
+    │   │   └── TournamentRepositoryInterface.php
+    │   └── Service/
+    │       ├── MatchWinner/
+    │       │   └── MatchWinnerStrategyInterface.php
+    │       └── WinnerPointsServiceInterface.php
+    └── Infrastructure/
+        └── Repository/
+            └── TournamentRepository.php
+
+```
+
+#### Módulo Player:
+
+```
+src/
+└── Player/
+    ├── Application/
+    │   ├── Command/
+    │   │   ├── CreatePlayerCommand.php
+    │   │   ├── CreatePlayerCommandHandler.php
+    │   │   ├── DeletePlayerCommand.php
+    │   │   ├── DeletePlayerCommandHandler.php
+    │   │   ├── UpdatePlayerSkillsCommand.php
+    │   │   └── UpdatePlayerSkillsCommandHandler.php
+    │   ├── Query/
+    │   │   ├── ListPlayersQuery.php
+    │   │   └── ListPlayersQueryHandler.php
+    │   └── Service/
+    │       ├── BasePlayerCreator.php
+    │       ├── FemalePlayerCreator.php
+    │       ├── MalePlayerCreator.php
+    │       └── PlayerCreatorInterface.php
+    ├── Domain/
+    │   ├── Entity/
+    │   │   └── Player.php
+    │   ├── Enum/
+    │   │   └── LimitsList.php
+    │   ├── Repository/
+    │   │   ├── PlayerRepositoryInterface.php
+    │   │   └── TournamentRepositoryInterface.php
+    │   └── ValueObject/
+    │       ├── Age.php
+    │       ├── Gender.php
+    │       └── Skill/
+    │           ├── Ability.php
+    │           ├── BaseSkill.php
+    │           ├── Reaction.php
+    │           ├── Strength.php
+    │           └── Velocity.php
+    └── Infrastructure/
+        ├── DataFixtures/
+        │   └── AppFixtures.php
+        └── Repository/
+            └── PlayerRepository.php
+
+```
