@@ -1,6 +1,8 @@
-# Proyecto de Simulación de Torneos
+# Proyecto de Simulación de Torneos de Tenis Master1000Geo :)
 
 Este proyecto es una API en Symfony que permite simular torneos deportivos masculinos y femeninos, gestionando jugadores, partidos y resultados.
+
+![Gaudio en accion](public/tennis.jpg)
 
 ## Tabla de Contenidos
 
@@ -95,6 +97,9 @@ docker compose exec app php bin/console doctrine:fixtures:load
     * Respuesta (JSON): Un mensaje de éxito y la información del ganador (objeto Player).
 * `POST /api/tournaments/simulate/female`: Simula un torneo femenino y devuelve la ganadora.
     * Respuesta (JSON): Un mensaje de éxito y la información de la ganadora (objeto Player).
+
+![Gaudio en accion](public/endpoints.png)
+
 
 8. Uso de Swagger UI
    Para explorar y probar los endpoints de la API de forma interactiva, puedes utilizar Swagger UI. Está disponible en la ruta /api/doc de la aplicación: http://localhost:8080/api/doc.
