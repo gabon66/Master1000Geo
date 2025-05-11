@@ -1,6 +1,6 @@
 # Proyecto de Simulación de Torneos de Tenis Master1000Geo :)
 
-Este proyecto es una API en Symfony que permite simular torneos deportivos masculinos y femeninos, gestionando jugadores, partidos y resultados.
+Este proyecto es una API en Symfony (PHP) y MySql (Db) que permite simular torneos deportivos masculinos y femeninos de tenis, gestionando jugadores, partidos y resultados.
 
 ![Gaudio en accion](public/tennis.jpg)
 
@@ -27,20 +27,20 @@ Este proyecto es una API en Symfony que permite simular torneos deportivos mascu
 
 ## 2. Instalación
 
-1.  Clona el repositorio del proyecto:
+1.  Clonar el repositorio del proyecto:
 
     ```bash
     git clone <repositorio>
     cd <nombre_del_proyecto>
     ```
 
-2.  Construye y levanta los contenedores Docker:
+2.  Construir y levantar los contenedores Docker:
 
     ```bash
     docker compose up -d --build
     ```
 
-3.  Instala las dependencias de Composer dentro del contenedor PHP:
+3.  Instalar las dependencias de Composer dentro del contenedor PHP:
 
     ```bash
     docker compose exec app composer install
@@ -62,7 +62,7 @@ docker compose exec app php bin/console doctrine:migrations:migrate -n
 Este comando aplicará cualquier migración pendiente a la base de datos, creando las tablas necesarias.
 
 ## 6. Carga de Datos de Prueba (Jugadores)
-   Para cargar datos de prueba (20 jugadores) en la base de datos, puedes ejecutar el siguiente comando:
+   Para cargar datos de prueba (20 jugadores 10 varones / 10 mujeres) en la base de datos, ejecutar el siguiente comando:
 
 ```bash
 docker compose exec app php bin/console doctrine:fixtures:load
@@ -102,10 +102,10 @@ docker compose exec app php bin/console doctrine:fixtures:load
 
 
 ## 8. Uso de Swagger UI
-   Para explorar y probar los endpoints de la API de forma interactiva, puedes utilizar Swagger UI. Está disponible en la ruta /api/doc de la aplicación: http://localhost:8080/api/doc.
+   Para explorar y probar los endpoints de la API de forma interactiva, se puede utilizar Swagger UI. Está disponible en la ruta /api/doc de la aplicación: http://localhost:8080/api/doc.
 
 ## 9. Pruebas
-   Si has implementado pruebas unitarias o funcionales, puedes ejecutarlas dentro del contenedor PHP:
+   Para ejecutar test unitarios dentro del contenedor PHP:
 
 ```bash
 docker compose exec app ./vendor/bin/phpunit
