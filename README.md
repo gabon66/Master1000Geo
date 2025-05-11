@@ -28,7 +28,7 @@ Este proyecto es una API en Symfony que permite simular torneos deportivos mascu
 1.  Clona el repositorio del proyecto:
 
     ```bash
-    git clone <tu_repositorio>
+    git clone <repositorio>
     cd <nombre_del_proyecto>
     ```
 
@@ -50,14 +50,14 @@ La configuración se maneja principalmente a través del archivo `docker-compose
 
 ## 4. Ejecución de la Aplicación
 
-La aplicación estará disponible en `http://localhost:8080` (o la URL que hayas configurado en tu `docker-compose.yml`).
+La aplicación estará disponible en `http://localhost:8080` (o la URL que hayas configurado en el `compose.yml`).
 
 ## 5. Ejecución de Migraciones de Doctrine
 
 ```bash
 docker compose exec app php bin/console doctrine:migrations:migrate -n
 ```
-Este comando aplicará cualquier migración pendiente a tu base de datos, creando las tablas necesarias.
+Este comando aplicará cualquier migración pendiente a la base de datos, creando las tablas necesarias.
 
 6. Carga de Datos de Prueba (Jugadores)
    Para cargar datos de prueba (20 jugadores) en la base de datos, puedes ejecutar el siguiente comando:
@@ -67,8 +67,6 @@ docker compose exec app php bin/console doctrine:fixtures:load
 ```
 
 ## 7. Endpoints de la API
-
-Aquí tienes una lista de los endpoints de la API:
 
 * `GET /api/players`: Obtiene todos los jugadores, con opción de filtrar, ordenar y limitar.
     * Parámetros de consulta opcionales:
@@ -99,7 +97,7 @@ Aquí tienes una lista de los endpoints de la API:
     * Respuesta (JSON): Un mensaje de éxito y la información de la ganadora (objeto Player).
 
 8. Uso de Swagger UI
-   Para explorar y probar los endpoints de la API de forma interactiva, puedes utilizar Swagger UI. Está disponible en la ruta /api/doc de tu aplicación: http://localhost:8080/api/doc.
+   Para explorar y probar los endpoints de la API de forma interactiva, puedes utilizar Swagger UI. Está disponible en la ruta /api/doc de la aplicación: http://localhost:8080/api/doc.
 
 9. Pruebas
    Si has implementado pruebas unitarias o funcionales, puedes ejecutarlas dentro del contenedor PHP:
