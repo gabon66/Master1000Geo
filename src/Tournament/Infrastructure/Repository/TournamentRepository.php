@@ -55,4 +55,35 @@ class TournamentRepository implements TournamentRepositoryInterface
         return $this->objectRepository->findOneBy($criteria, $orderBy);
     }
 
+    public function findAllByCriteria(?string $gender, ?\DateTimeImmutable $startDate, ?\DateTimeImmutable $endDate): array
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('t')
+            ->from(Tournament::class, 't');
+
+        if ($gender !== null) {
+            $queryBuilder->andWhere('t.genderTournament = :gender')
+                ->setParameter('gender', $gender);
+        }
+
+        if ($startDate !== null) {
+            $queryBuilder->andWhere('t.startDate >= :startDate')
+                ->setParameter('startDate', $startDate, 'datetime_immutable');
+        }
+
+        if ($endDate !== null) {
+            $queryBuilder->andWhere('t.startDate <= :endDate')
+                ->setParameter('endDate', $endDate, 'datetime_immutable');
+        }
+
+        // Agregar la ordenación por fecha de inicio de forma descendente
+        $queryBuilder->orderBy('t.startDate', 'DESC');
+
+        return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function save(Tournament $tournament): void
+    {
+        $this->add($tournament, true);
+    }
 }

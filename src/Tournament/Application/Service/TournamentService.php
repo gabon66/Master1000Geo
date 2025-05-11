@@ -6,15 +6,15 @@ use App\Player\Domain\Entity\Player;
 use App\Player\Domain\ValueObject\Gender;
 use App\Tournament\Domain\Entity\Tournament;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Tournament\Domain\Repository\TournamentRepositoryInterface;
 
 class TournamentService
 {
-    private EntityManagerInterface $entityManager;
+    private TournamentRepositoryInterface $tournamentRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(TournamentRepositoryInterface $tournamentRepository)
     {
-        $this->entityManager = $entityManager;
+        $this->tournamentRepository = $tournamentRepository;
     }
 
     public function createAndSaveTournament(string $gender): Tournament
@@ -24,15 +24,12 @@ class TournamentService
         $tournament->setStartDate(new \DateTimeImmutable());
         $tournament->setName("");
 
-
-        $this->entityManager->persist($tournament);
-        $this->entityManager->flush();
+        $this->tournamentRepository->save($tournament);
 
         // Generar el nombre dinámico después de que la ID haya sido asignada
         $tournament->setName(sprintf('Master 1000 Edición %s - %s', $tournament->getId(), ucfirst($gender)));
 
-        $this->entityManager->persist($tournament);
-        $this->entityManager->flush();
+        $this->tournamentRepository->save($tournament);
 
         return $tournament;
     }
@@ -40,13 +37,11 @@ class TournamentService
     public function setTournamentWinner(Tournament $tournament, Player $winner): void
     {
         $tournament->setWinner($winner);
-        $this->entityManager->persist($tournament);
-        $this->entityManager->flush();
+        $this->tournamentRepository->save($tournament);
     }
 
     public function save(Tournament $tournament): void
     {
-        $this->entityManager->persist($tournament);
-        $this->entityManager->flush();
+        $this->tournamentRepository->save($tournament);
     }
 }

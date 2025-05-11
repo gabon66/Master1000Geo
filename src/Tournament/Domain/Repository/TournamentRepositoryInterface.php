@@ -20,4 +20,7 @@ interface TournamentRepositoryInterface
     public function add(Tournament $entity, bool $flush = false): void;
 
     public function remove(Tournament $entity, bool $flush = false): void;
+
+    public function findAllByCriteria(?string $gender, ?\DateTimeImmutable $startDate, ?\DateTimeImmutable $endDate): array;
+    public function save(Tournament $tournament): void;
 }

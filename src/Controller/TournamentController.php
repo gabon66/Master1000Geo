@@ -8,8 +8,8 @@ use App\Player\Domain\Entity\Player;
 use App\Player\Domain\ValueObject\Gender;
 use App\Tournament\Application\Command\SimulateTournamentCommand;
 use App\Tournament\Application\Command\SimulateTournamentCommandHandler;
-use App\Tournament\Application\Query\GetAllTournamentsQuery;
-use App\Tournament\Application\Query\GetAllTournamentsQueryHandler;
+use App\Tournament\Application\Query\GetTournamentsQuery;
+use App\Tournament\Application\Query\GetTournamentsQueryHandler;
 use OpenApi\Attributes as OA;
 use phpDocumentor\Reflection\DocBlock\Serializer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,6 +41,20 @@ final class TournamentController extends AbstractController
         required: false,
         schema: new OA\Schema(type: 'string', enum: ['male', 'female'])
     )]
+    #[OA\Parameter(
+        name: 'startDate',
+        in: 'query',
+        description: 'Filtrar torneos a partir de esta fecha (YYYY-MM-DD)',
+        required: false,
+        schema: new OA\Schema(type: 'string', format: 'date')
+    )]
+    #[OA\Parameter(
+        name: 'endDate',
+        in: 'query',
+        description: 'Filtrar torneos hasta esta fecha (YYYY-MM-DD)',
+        required: false,
+        schema: new OA\Schema(type: 'string', format: 'date')
+    )]
     #[OA\Response(
         response: 200,
         description: 'Lista de todos los torneos con su información y ganador.',
@@ -67,34 +81,22 @@ final class TournamentController extends AbstractController
         )
     )]
     #[Route('/', name: 'get_all_tournaments', methods: ['GET'])]
-    public function getAllTournaments(Request $request,GetAllTournamentsQueryHandler $handler): JsonResponse
+    public function getAllTournaments(Request $request, GetTournamentsQueryHandler $handler): JsonResponse
     {
         try {
             $genderFilter = $request->query->get('gender');
-            $query = new GetAllTournamentsQuery($genderFilter);
-            $tournaments = $handler($query);
+            $startDateFilter = $request->query->get('startDate');
+            $endDateFilter = $request->query->get('endDate');
 
-            $data = [];
-
-            foreach ($tournaments as $tournament) {
-                $data[] = [
-                    'id' => $tournament->getId(),
-                    'name' => $tournament->getName(),
-                    'startDate' => $tournament->getStartDate()->format('Y-m-d H:i:s'),
-                    'gender' => $tournament->getGenderTournament()->getValue(),
-                    'winner' => $tournament->getWinner() ? [
-                        'id' => $tournament->getWinner()->getId(),
-                        'name' => $tournament->getWinner()->getName(),
-                    ] : null,
-                ];
-            }
+            $query = new GetTournamentsQuery($genderFilter, $startDateFilter, $endDateFilter);
+            $data = $handler($query);
 
             return $this->json($data);
 
         } catch (\InvalidArgumentException $e) {
             return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
-            return new JsonResponse(['error' => 'Failed to simulate male tournament.', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['error' => 'Failed to retrieve tournaments.', 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -139,7 +141,7 @@ final class TournamentController extends AbstractController
     private function simulateTournament(string $gender ,SimulateTournamentCommandHandler $simulateTournamentCommandHandler)
     {
         try {
-            $command = new SimulateTournamentCommand('male');
+            $command = new SimulateTournamentCommand($gender);
             $winner = $simulateTournamentCommandHandler($command);
 
             if ($winner instanceof Player) {

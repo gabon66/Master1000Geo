@@ -170,6 +170,23 @@ final class PlayersController extends AbstractController
         return new JsonResponse($responseData, Response::HTTP_CREATED);
     }
 
+
+    #[OA\Response(
+        response: 200,
+        description: 'List of the top-ranked players by gender',
+        content: new OA\JsonContent(
+            type: 'array',
+            items: new OA\Items(
+                type: 'object',
+                properties: [
+                    new OA\Property(property: 'id', type: 'integer', description: 'The ID of the player'),
+                    new OA\Property(property: 'name', type: 'string', description: 'The name of the player'),
+                    new OA\Property(property: 'points', type: 'integer', description: 'The points of the player'),
+                    // ... other properties of the player ...
+                ]
+            )
+        )
+    )]
     #[Route('/top/{gender}', name: 'top_players_by_gender', methods: ['GET'], requirements: ['gender' => 'male|female'])]
     public function getTopPlayersByGender(string $gender,
                                           ListPlayersQueryHandler $handler,
@@ -309,6 +326,4 @@ final class PlayersController extends AbstractController
                 Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
