@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: torneo-api-service
+spec:
+  selector:
+    app: torneo-api
+  ports:
+    - protocol: TCP
+      port: 80 # El puerto externo al que se accederá
+      targetPort: 80 # El puerto del contenedor
+  type: LoadBalancer

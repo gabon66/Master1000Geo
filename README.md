@@ -222,3 +222,17 @@ src/
             └── PlayerRepository.php
 
 ```
+
+**Nota sobre las Entidades del Modelo:**
+
+En este proyecto, hemos utilizado las **Entidades de Symfony** como las entidades de nuestro modelo de dominio. Si bien esto introduce una dependencia con el framework en la capa de Dominio, reconocemos las **grandes ventajas** que ofrecen estas entidades, especialmente en lo que respecta a la persistencia y la gestión del estado a través de Doctrine.
+
+Considero que este enfoque pragmático permite aprovechar la potencia del framework sin ser puristas estrictos de DDD en este aspecto. En caso de una futura migración a otro framework, la separación de la lógica de negocio en las capas de Aplicación y Dominio facilitaría la adaptación, siendo la **eliminación de las anotaciones específicas de Doctrine** en las entidades uno de los principales pasos a seguir.
+
+
+## Futuro Despliegue en Kubernetes
+
+Este proyecto ha sido diseñado teniendo en mente un posible despliegue futuro en un entorno de Kubernetes. Para ello, se requerirían archivos de definición de Kubernetes, como los siguientes ejemplos básicos:
+
+**`deployment.yaml`:**
+**`service.yaml`:**

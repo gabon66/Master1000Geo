@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: torneo-api-deployment
+spec:
+  replicas: 3 # Puedes ajustar el número de réplicas
+  selector:
+    matchLabels:
+      app: torneo-api
+  template:
+    metadata:
+      labels:
+        app: torneo-api
+    spec:
+      containers:
+        - name: torneo-api-container
+          image: tu-registro/tu-nombre-de-imagen:tu-tag # Reemplaza con la imagen de Docker de tu API
+          ports:
+            - containerPort: 80 # El puerto en el que escucha tu aplicación
+          env:
+          # Aquí podrías definir variables de entorno necesarias
+          # Por ejemplo, la URL de la base de datos (¡considera usar Secrets!)
+            - name: DATABASE_URL
+          #   value: "tu_url_de_base_de_datos"
