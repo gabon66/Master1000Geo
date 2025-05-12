@@ -25,15 +25,3 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-
-# Copia los archivos de tu proyecto al directorio de trabajo
-COPY . /var/www/html/
-
-# Instala las dependencias
-RUN composer install --no-dev --optimize-autoloader
-
-# Ejecuta las migraciones de Doctrine
-RUN php bin/console doctrine:migrations:migrate --no-interaction
-
-# Limpia la caché de Symfony (opcional, puede hacerse en el release phase también)
-RUN php bin/console cache:clear --no-warmup --env=prod
