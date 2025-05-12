@@ -24,4 +24,11 @@ RUN apt-get update && apt-get install -y \
 # Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
+# Define el directorio de trabajo
 WORKDIR /var/www/html
+
+# 🧱 Copia tu código fuente al contenedor
+COPY . .
+
+# Opcional: instalar dependencias ya durante el build
+RUN composer install --no-dev --optimize-autoloader
