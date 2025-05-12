@@ -1,6 +1,6 @@
 build:
   docker:
     web: Dockerfile
-env:
-  APP_ENV: prod
-  APP_DEBUG: 0
+  env:
+    APP_ENV: prod
+    APP_DEBUG: 0
